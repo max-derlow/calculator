@@ -2,10 +2,11 @@ const numbers = document.querySelectorAll(".number");
 const symbols = document.querySelectorAll(".symbol");
 const operators = document.querySelectorAll(".operator");
 const functions = document.querySelectorAll(".function");
+const mainDisplay = document.querySelector("#display");
 const displaySmall = document.querySelector("#smallNumberArea p");
 const displayBig = document.querySelector("#largeNumberArea p");
 const btnClear = document.querySelector("#btnClear");
-const btnAllClear = document.querySelector("#btnAllClear");
+//const btnAllClear = document.querySelector("#btnAllClear");
 const btnEval = document.querySelector("#btnEval");
 
 
@@ -13,7 +14,7 @@ const numbersArr = Array.from(numbers).map(number => number.textContent).sort();
 const operatorsArr = Array.from(operators).map(operator => operator.textContent);
 const symbolsArr = Array.from(symbols).map(symbol => symbol.textContent);
 
-const maxChars = 32;
+const maxChars = 18;
 
 let subDisplayContent = "";
 let mainDisplayContent = "";
@@ -34,14 +35,14 @@ btnClear.addEventListener('click', (e) => {
     mainDisplayContent = "0";
     updateMainDisplay();
 }) 
-
+/*
 btnAllClear.addEventListener('click', (e) => {
     mainDisplayContent = "0";
     subDisplayContent = "";
     updateMainDisplay();
     updateSubDisplay();
 }) 
-
+*/
 btnEval.addEventListener('click', evaluate);
 
 document.addEventListener("keydown", (e) => {
@@ -52,6 +53,7 @@ document.addEventListener("keydown", (e) => {
         switch(e.key) {
             case "Enter": evaluate(); break;
             case "Backspace": undo(); break;
+            case "Escape": clearAll(); break;
             case "c":
             case "C": clear(); break;
             case "/": appendChar("÷"); break;
@@ -78,19 +80,17 @@ function evaluate() {
     
     console.log(inputOperators.length);
     console.log(inputNbrs.length);
-    //remove hanging operators and decimals
+    //remove hanging operators
     if(inputOperators.length === inputNbrs.length){
         inputOperators.splice(inputOperators.length-1,1);
         mainDisplayContent = mainDisplayContent.split("").slice(0, -1).join("");
     }; 
+
     console.log(inputOperators);
     let opIndex;
     let newVal = inputNbrs[0];
     while(inputOperators.length > 0) {
         //parenthesis
-
-        //remove hanging operator
-        
 
         if(inputOperators.includes("÷")) {
             opIndex = inputOperators.indexOf("÷");
@@ -115,14 +115,20 @@ function evaluate() {
     }
 
     if(isNaN(newVal)){
-        newVal = 0;
+        newVal = "0";
     }
-    console.log(newVal);
-    
+    console.log(typeof(newVal));
+        newVal = newVal.toString();
+    //remove hanging decimals
+    if(newVal.split("")[newVal.length-1] === "."){
+        console.log("OMEGALUL", newVal)
+        newVal = newVal.split("").splice(0,newVal.length-1).join("");
+        mainDisplayContent = mainDisplayContent.split("").splice(0,mainDisplayContent.length-1).join("");
+        console.log("OMEGALUL", newVal)
 
-
+    }
     subDisplayContent = `(${mainDisplayContent}) = ${newVal}`;
-    mainDisplayContent = newVal.toString();
+    mainDisplayContent = newVal;
     updateSubDisplay();
     updateMainDisplay();
     
@@ -147,10 +153,18 @@ function updateSubDisplay() {
     displaySmall.textContent = subDisplayContent;
 }
 
+function displayFullAlert() {
+    mainDisplay.classList.toggle("full");
+    setTimeout(() => {
+        mainDisplay.classList.toggle("full");
+    }, 100)
+}
+
 
 function appendChar(newChar) {
 
-    if(mainDisplayContent.length >= maxChars) {
+    if(mainDisplayContent.length > maxChars) {
+        displayFullAlert();
         return;
     }
 
@@ -162,7 +176,7 @@ function appendChar(newChar) {
         return;
     }
 
-    if(operatorsArr.includes(mainDisplayContent.slice(-1)) && operatorsArr.includes(newChar)){
+    if(operatorsArr.includes((mainDisplayContent.slice(-1)) || mainDisplayContent.slice(-1) === ".") && (operatorsArr.includes(newChar)) || newChar === "."){
         mainDisplayContent = mainDisplayContent.split("").slice(0,-1).join("")
     } 
     
@@ -182,7 +196,6 @@ function appendChar(newChar) {
     } else {
         mainDisplayContent = `${currentStr}${newChar}`;
     }*/
-
     updateMainDisplay();    
 }
 
@@ -196,22 +209,14 @@ function undo(){
     updateMainDisplay();
 }
 
-function operatorHandler(operator) { 
-    switch(operator) {
-        case operator === "+":
-            break;
-        case operator === "-":
-            break;
-        case operator === "%":
-            break;     
-        case operator === "x":
-            break;
-        case operator === "÷":
-            break;       
-    }
-}
-
 function clear() {
     mainDisplayContent = "0";
     updateMainDisplay();
+}
+
+function clearAll() {
+    mainDisplayContent = "0";
+    subDisplayContent = "";
+    updateMainDisplay();
+    updateSubDisplay();
 }

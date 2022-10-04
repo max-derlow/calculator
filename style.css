@@ -8,7 +8,7 @@ body,html {
     padding: 0;
     font-family: sans-serif;
     height:100%;
-    background-color: #2a2e32;
+    background-color: #212121;
 }
 
 p {
@@ -29,7 +29,7 @@ body {
     align-items: center;
     flex-direction: column;
     background-color:#2a2e32;
-    width:500px;
+    box-shadow: 0px 0px 10px #1e1e1e, 0px 0px 0px #1e1e1e, 0px 0px 0px #1e1e1e, 2px 2px 5px #1e1e1e, 0px 0px 0px #1e1e1e, 0px 0px 0px #1e1e1e;;
     height:500px;
     padding:10px;
     border-radius: 6px;
@@ -45,6 +45,12 @@ body {
     border-style: solid;
     border-width:thin;
     border-color: #6e7175;
+    transition-duration:0.1s;
+}
+
+#display.full{
+    box-shadow: inset 0 0 0 1000px #ee07074f;
+    transition-duration:0.1s;
 }
 
 #smallNumberArea {
