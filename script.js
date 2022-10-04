@@ -48,12 +48,16 @@ document.addEventListener("keydown", (e) => {
     console.log(e)
     if(numbersArr.includes(e.key) || operatorsArr.includes(e.key) || symbolsArr.includes(e.key)) {
         appendChar(e.key);
-    } else if (e.code === "Enter") {
-        evaluate();
-    } else if (e.code === "Backspace") {
-        undo();
-    }
-});
+    } else {
+        switch(e.key) {
+            case "Enter": evaluate(); break;
+            case "Backspace": undo(); break;
+            case "c":
+            case "C": clear(); break;
+            case "/": appendChar("÷"); break;
+        }
+    }  
+})
 
 //The biggest TODO ever
 function interpretMainContent() {
@@ -185,7 +189,7 @@ function appendChar(newChar) {
 //undo button
 function undo(){
     if(mainDisplayContent.length < 2) {
-        mainDisplayContent = 0;
+        mainDisplayContent
     } else {
         mainDisplayContent = mainDisplayContent.split("").slice(0,-1).join("")
     }
@@ -208,5 +212,6 @@ function operatorHandler(operator) {
 }
 
 function clear() {
-    displayBig.textContent = "";
+    mainDisplayContent = "0";
+    updateMainDisplay();
 }
