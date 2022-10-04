@@ -176,3 +176,8 @@ body {
     height:130px;
     line-height:130px;
 }
+
+.btn.disable {
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1000px #0707074f;
+}

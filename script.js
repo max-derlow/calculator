@@ -175,8 +175,15 @@ function appendChar(newChar) {
     if(currentNbr.includes(".") && newChar === ".") {
         return;
     }
+    console.log(currentNbr);
 
-    if(operatorsArr.includes((mainDisplayContent.slice(-1)) || mainDisplayContent.slice(-1) === ".") && (operatorsArr.includes(newChar)) || newChar === "."){
+    if(currentNbr.includes(".") || newChar === "."){
+        document.querySelector("#dot").classList.add("disable");
+    } else {
+        document.querySelector("#dot").classList.remove("disable");
+    }
+
+    if(operatorsArr.includes(mainDisplayContent.slice(-1)) && operatorsArr.includes(newChar)){
         mainDisplayContent = mainDisplayContent.split("").slice(0,-1).join("")
     } 
     
@@ -201,8 +208,12 @@ function appendChar(newChar) {
 
 //undo button
 function undo(){
+
+    if(mainDisplayContent.split("")[mainDisplayContent.length-1] === "."){
+        document.querySelector("#dot").classList.remove("disable");
+    }
     if(mainDisplayContent.length < 2) {
-        mainDisplayContent
+        mainDisplayContent = "0";
     } else {
         mainDisplayContent = mainDisplayContent.split("").slice(0,-1).join("")
     }
